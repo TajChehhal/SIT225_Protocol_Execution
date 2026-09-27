@@ -5,7 +5,7 @@ import numpy as np
 df = pd.read_csv('combined_processed.csv') # Loads the combined sensor dataset
 df['timestamp'] = pd.to_datetime(df['timestamp']) # Converts timestamp column from text to datetime objects
 
-# --- Plot 1: soil moisture over time, one line per session ---
+# Plot 1: soil moisture over time, one line per session 
 fig, ax = plt.subplots(figsize=(9,5.5))
 for session in df['session'].unique(): # Loop through each session label
     g = df[df['session']==session].sort_values('timestamp').copy() # Isolates this session's rows, ordered by time
@@ -21,7 +21,7 @@ plt.savefig('plot1_timeseries.png', dpi=150) # Save the figure to disk
 
 
 
-# --- Plot 2: distribution of decline rates, grouped by light condition ---
+# Plot 2: distribution of decline rates, grouped by light condition
 df['condition'] = df['session'].map({'Session_A':'Sun','Session_C':'Sun','Session_B':'Dark','Session_D':'Dark'}) # Tag each session as Sun or Dark
 sun_rates = df[df['condition']=='Sun']['decline_rate'].dropna() # Decline rates for sun sessions and drop any missing values
 dark_rates = df[df['condition']=='Dark']['decline_rate'].dropna() # Decline rates for dark sessions
@@ -36,7 +36,7 @@ plt.savefig('plot2_distribution.png', dpi=150)
 
 
 
-# --- Plot 3: lux vs decline rate, sun sessions only, with linear fit ---
+# Plot 3: lux vs decline rate, sun sessions only, with linear fit 
 sun = df[df['session'].isin(['Session_A','Session_C'])].dropna(subset=['decline_rate']) # Sun-session rows with a valid decline rate
 x, y = sun['lux'].values, sun['decline_rate'].values # Extract lux and decline rate as arrays for fitting
 coef = np.polyfit(x, y, 1) # Fit a straight line to the data
